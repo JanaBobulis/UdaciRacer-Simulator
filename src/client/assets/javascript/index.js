@@ -85,7 +85,7 @@ async function delay(ms) {
 async function handleCreateRace() {
 	try {
 		//Get player_id and track_id from the sto
-		const {player_id, track_id } = store;
+		const { player_id, track_id } = store;
 		// const race = TODO - invoke the API call to create the race, then save the result
 		const race = await createRace(player_id, track_id);
 		console.log(race, 'createRace::')
@@ -111,9 +111,9 @@ function runRace(raceID) {
 		let raceInterval = setInterval(async() => {
 				const raceStatus = await getRace(raceID);
 				console.log(raceStatus);
-				if(raceStatus === "in-progress"){
+				if(raceStatus.status === "in-progress"){
 					renderAt('#leaderBoard', raceProgress(raceStatus.positions))
-				} else if (raceStatus === "finished"){
+				} else if (raceStatus.status === "finished"){
 					clearInterval(raceInterval) // to stop the interval from repeating
 					renderAt('#race', resultsView(raceStatus.positions)) // to render the results view
 					resolve(raceStatus) // resolve the promise
@@ -205,20 +205,41 @@ function renderRacerCars(racers) {
 	`
 }
 
-const racerName = {
-	"Racer 1": "Luna",
-	"Racer 2": "Muffintop",
-	"Racer 3": "Kitty",
-	"Racer 4": "Princess Caroline",
-	"Racer 5": "Gentleman"
+function racerName(name)  {
+	let newName;
+
+	if(name === "Racer 1") {
+		newName = "Luna"
+	} else if (name === "Racer 2") {
+		newName = "Muffintop"
+	} else if (name === "Racer 3") {
+		newName = "Kitty"
+	} else if (name === "Racer 4") {
+		newName = "Princess Caroline"
+	} else if (name === "Racer 5") {
+		newName = "Gentleman"
+	}
+	return newName;
 }
 
-const trackName = {
-	"Track 1": "Kitty's backyard",
-	"Track 2": "Roof",
-	"Track 3": "Gentleman's living room",
-	"Track 4": "Fishery",
-	"Track 5": "Garden"
+function trackName(name) {
+	let newName;
+
+	if(name === "Track 1") {
+		newName = "Kitty's backyard"
+	} else if (name === "Track 2") {
+		newName = "Roof"
+	} else if (name === "Track 3") {
+		newName = "Gentleman's living rooms"
+	} else if (name === "Track 4") {
+		newName = "Fishery"
+	} else if (name === "Track 5") {
+		newName = "Garden"
+	} else if (name === "Track 6") {
+		newName = "Ice cream shop"
+	}
+
+	return newName;
 }
 
 function renderRacerCard(racer) {
@@ -226,7 +247,7 @@ function renderRacerCard(racer) {
 
 	return `
 		<li class="card podracer" id="${id}">
-			<h3>${racerName[driver_name]}</h3>
+			<h3>${racerName(driver_name)}</h3>
 			<p>Top speed: ${top_speed}</p>
 			<p>Acceleration: ${acceleration}</p>
 			<p>Handling: ${handling}</p>
@@ -255,7 +276,7 @@ function renderTrackCard(track) {
 
 	return `
 		<li id="${id}" class="card track">
-			<h3>${trackName[name]}</h3>
+			<h3>${trackName(name)}</h3>
 		</li>
 	`
 }
@@ -270,7 +291,7 @@ function renderCountdown(count) {
 function renderRaceStartView(track, racers) {
 	return `
 		<header>
-			<h1>Race: ${trackName[track.name]}</h1>
+			<h1>Race: ${trackName(track.name)}</h1>
 		</header>
 		<main id="two-columns">
 			<section id="leaderBoard">
@@ -303,6 +324,7 @@ function resultsView(positions) {
 
 function raceProgress(positions) {
 	let userPlayer = positions.find(e => e.id === store.player_id)
+	console.log(userPlayer);
 	userPlayer.driver_name += " (you)"
 
 	positions = positions.sort((a, b) => (a.segment > b.segment) ? -1 : 1)
