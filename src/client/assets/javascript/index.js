@@ -35,15 +35,24 @@ async function onPageLoad() {
 function setupClickHandlers() {
 	document.addEventListener('click', function(event) {
 		const { target } = event
+		let parent = event.target.parentElement;
 
 		// Race track form field
 		if (target.matches('.card.track')) {
 			handleSelectTrack(target)
 		}
 
+		if (parent.matches('.card.track')){
+			handleSelectTrack(parent)
+		}
+
 		// Podracer form field
 		if (target.matches('.card.podracer')) {
 			handleSelectPodRacer(target)
+		}
+
+		if (parent.matches('.card.podracer')){
+			handleSelectPodRacer(parent)
 		}
 
 		// Submit create race form
@@ -99,8 +108,9 @@ async function handleCreateRace() {
 function runRace(raceID) {
 	return new Promise(resolve => {
 	// TODO - use Javascript's built in setInterval method to get race info every 500ms
-		const raceInterval = setInterval(async() => {
+		let raceInterval = setInterval(async() => {
 				const raceStatus = await getRace(raceID);
+				console.log(raceStatus);
 				if(raceStatus === "in-progress"){
 					renderAt('#leaderBoard', raceProgress(raceStatus.positions))
 				} else if (raceStatus === "finished"){
@@ -216,7 +226,7 @@ function renderRacerCard(racer) {
 
 	return `
 		<li class="card podracer" id="${id}">
-			<h3>Racer name: ${racerName[driver_name]}</h3>
+			<h3>${racerName[driver_name]}</h3>
 			<p>Top speed: ${top_speed}</p>
 			<p>Acceleration: ${acceleration}</p>
 			<p>Handling: ${handling}</p>
@@ -369,8 +379,7 @@ function createRace(player_id, track_id) {
 		body: JSON.stringify(body)
 		})
 		.then(res => res.json())
-		.catch((error) => (error, "Problem with createRace request::")) 
-	
+		.catch((error) => (error, "Problem with createRace request::"))
 }
 
 function getRace(id) {
