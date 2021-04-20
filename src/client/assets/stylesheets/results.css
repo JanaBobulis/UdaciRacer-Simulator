@@ -1,8 +1,14 @@
 /* RESULTS PAGE SPECIFIC STYLES */
 
 /* -------------------  MOBILE  --------------------- */
-
-
+.results {
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: row;
+    margin: auto;
+}
 /* -------------------  TABLET  --------------------- */
 @media (min-width: 768px) {
 

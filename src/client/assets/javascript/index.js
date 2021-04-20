@@ -353,7 +353,9 @@ function raceProgress(positions) {
 		<main>
 			<h3>Leaderboard</h3>
 			<section id="leaderBoard">
+				<div class="results">
 				${results}
+				</div>
 			</section>
 		</main>
 	`

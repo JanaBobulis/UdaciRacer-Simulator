@@ -90,10 +90,12 @@ section {
   padding: 30px 0;
 }
 
+
 footer {
   height: 200px;
   background-color: black;
 }
+
 
 /* -------------------  TABLET  --------------------- */
 @media (min-width: 768px) {
