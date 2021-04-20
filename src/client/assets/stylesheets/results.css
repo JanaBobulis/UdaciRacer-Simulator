@@ -1,13 +1,22 @@
 /* RESULTS PAGE SPECIFIC STYLES */
 
 /* -------------------  MOBILE  --------------------- */
+main {
+    margin: auto;
+    margin-top: 30px;
+}
+
 .results {
-    width: 40%;
-    display: flex;
+    display: grid;
     justify-content: center;
     align-content: center;
-    flex-direction: row;
+    flex-direction: column;
     margin: auto;
+}
+
+a {
+    display: grid;
+    text-align: center;
 }
 /* -------------------  TABLET  --------------------- */
 @media (min-width: 768px) {
@@ -17,6 +26,8 @@
 /* -------------------  DESKTOP  -------------------- */
 
 @media (min-width: 1224px) {
+
+    
 }
 
 /* -------------------  LARGE SCREENS  -------------- */

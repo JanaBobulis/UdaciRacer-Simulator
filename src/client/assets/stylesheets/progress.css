@@ -8,9 +8,10 @@ header {
 main#two-columns {
     margin: 50px 0;
     display: flex;
+    flex-direction: column;
 }
 
-main#two-columns section {
+#two-columns p {
     max-width: 50vw;
 }
 
@@ -39,7 +40,13 @@ section#accelerate button {
 
 /* -------------------  TABLET  --------------------- */
 @media (min-width: 768px) {
+    main#two-columns {
+        flex-direction: row;
+    }
 
+    #gas-peddle {
+        display: grid;
+    }
 }
 
 /* -------------------  DESKTOP  -------------------- */
