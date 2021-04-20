@@ -85,12 +85,14 @@ async function delay(ms) {
 async function handleCreateRace() {
 	try {
 		//Get player_id and track_id from the sto
-		const { player_id, track_id } = store;
+		const  player_id = store.player_id
+		const track_id = store.track_id
 		// const race = TODO - invoke the API call to create the race, then save the result
 		const race = await createRace(player_id, track_id);
 		console.log(race, 'createRace::')
 		//update the store with the race id
 		store.race_id = parseInt(race.ID) - 1;
+		console.log(store.race_id)
 		// render starting UI
 		renderAt('#race', renderRaceStartView(race.Track, race.Cars));
 		// The race has been created, now start the countdown
@@ -109,7 +111,7 @@ function runRace(raceID) {
 	return new Promise(resolve => {
 	// TODO - use Javascript's built in setInterval method to get race info every 500ms
 		let raceInterval = setInterval(async() => {
-				const raceStatus = await getRace(raceID);
+				let raceStatus = await getRace(raceID);
 				console.log(raceStatus);
 				if(raceStatus.status === "in-progress"){
 					renderAt('#leaderBoard', raceProgress(raceStatus.positions))
@@ -177,6 +179,7 @@ function handleSelectTrack(target) {
 
 	//save the selected track id to the store
 	store.track_id = parseInt(target.id);
+	console.log(store.track_id)
 	
 }
 
@@ -238,7 +241,6 @@ function trackName(name) {
 	} else if (name === "Track 6") {
 		newName = "Ice cream shop"
 	}
-
 	return newName;
 }
 
@@ -289,7 +291,7 @@ function renderCountdown(count) {
 }
 
 function renderRaceStartView(track, racers) {
-	return `
+		return `
 		<header>
 			<h1>Race: ${trackName(track.name)}</h1>
 		</header>
@@ -323,22 +325,29 @@ function resultsView(positions) {
 }
 
 function raceProgress(positions) {
-	let userPlayer = positions.find(e => e.id === store.player_id)
-	console.log(userPlayer);
-	userPlayer.driver_name += " (you)"
 
 	positions = positions.sort((a, b) => (a.segment > b.segment) ? -1 : 1)
 	let count = 1
 
 	const results = positions.map(p => {
+		if(p.id === store.player_id){
+			return `
+			<tr>
+				<td>
+					<h3>${count++} - ${racerName(p.driver_name)} (you) </h3>
+				</td>
+			</tr>
+			
+			`
+		}
 		return `
 			<tr>
 				<td>
-					<h3>${count++} - ${p.driver_name}</h3>
+					<h3>${count++} - ${racerName(p.driver_name)}</h3>
 				</td>
 			</tr>
 		`
-	})
+	}).join(' ')
 
 	return `
 		<main>

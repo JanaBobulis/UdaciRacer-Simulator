@@ -14,6 +14,10 @@ main#two-columns section {
     max-width: 50vw;
 }
 
+td {
+    line-height: 10px;
+}
+
 section#accelerate button {
     height: 300px;
     width: 300px;
